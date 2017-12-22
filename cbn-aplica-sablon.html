@@ -1,0 +1,134 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<link rel="import" href="../cbn-form/cbn-form.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<dom-module id="cbn-aplica-sablon">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <paper-dialog id="dialog">
+            <h2>Detalii raport</h2>
+            <cbn-form id="form" config="{{sablon.contentParametri}}" model="{{model}}"></cbn-form>
+            <div class="buttons">
+                <paper-button dialog-dismiss class="icon-btn">Cancel</paper-button>
+                <paper-button class="icon-btn" on-click="aplicaSablon">Generate report</paper-button>
+            </div>
+        </paper-dialog>
+
+    </template>
+
+    <script>
+        /**
+         * `cbn-aplica-sablon`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class CbnAplicaSablon extends Polymer.Element {
+            static get is() {
+                return 'cbn-aplica-sablon';
+            }
+
+            static get properties() {
+                return {
+                    sablon: {
+                        type: Object,
+                        value: {}
+                    },
+                    keys: {
+                        type: Array,
+                        value: []
+                    },
+                    currentModel: {
+                        type: Object,
+                        value: {}
+                    },
+                    namespace: {
+                        type: String
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                document.addEventListener("cbn-aplica-sablon", this.openAplicaSablon.bind(this), true);
+            }
+
+            disconnectedCallback() {
+                super.disconnectedCallback();
+                document.addEventListener("cbn-aplica-sablon", this.openAplicaSablon.bind(this), true);
+            }
+
+            openAplicaSablon(event) {
+                let sablon = JSON.parse(JSON.stringify(event.detail.sablon));
+                this.sablon = sablon;
+                this.model = sablon["valueParametri"] || {};
+                this.keys = event.detail.keys || [];
+                if (this.sablon["parametri"] == "Da") {
+                    this.set("sablon.contentParametri", JSON.parse(sablon["contentParametri"]));
+                    this.$.dialog.open();
+                } else {
+                    this.generareRaport(this.sablon["_hash"], this.keys, false, this.currentModel);
+                }
+            }
+
+            aplicaSablon() {
+                if (this.$.form.validate()) {
+                    this.generareRaport(this.sablon["_hash"], this.keys, false, this.currentModel);
+                    this.$.dialog.close();
+                } else {
+                    this.dispatchEvent(new CustomEvent('cbn-message', {
+                        bubbles: true,
+                        composed: true,
+                        detail: {
+                            "text": "Completati parametrii formularului",
+                            "type": "error"
+                        }
+                    }));
+                }
+            }
+
+            generareRaport(hashReport, hash, descarcare, params) {
+                let i;
+                let iframe = document.createElement("iframe");
+                iframe.style.display = "none";
+                document.body.appendChild(iframe);
+                let html = "<!DOCTYPE html><html><head><title></title></head><body><form id='formRaport' action='/do/Raport' target=\"_blank\" method='POST'>";
+                html += "<input type='hidden' name='namespace' value='" + this.namespace + "'/>";
+                html += "<input type='hidden' name='hashReport' value='" + hashReport + "'/>";
+
+                if (hash != undefined) {
+                    if (hash instanceof Array) {
+                        for (i = 0; i < hash.length; i++) {
+                            html += "<input type='hidden' name='keys' value='" + hash[i] + "'/>";
+                        }
+                    } else {
+                        html += "<input type='hidden' name='keys' value='" + hash + "'/>";
+                    }
+                }
+
+                html += "<input type='hidden' name='descarcarePdf' value='" + descarcare + "'/>";
+                html += "<input type='hidden' name='download' value='inline'/>";
+                if (params != undefined) {
+                    let keys = Object.keys(params);
+                    for (i = 0; i < keys.length; i++) {
+                        html += "<input type='hidden' name='" + "ADMA." + keys[i] + "' value='" + params[keys[i]] + "'/>";
+                    }
+                }
+                html += "</form></body><script>";
+                html += "document.getElementById('formRaport').submit();";
+                html += "<" + "/script>" + "</html>";
+                iframe.contentDocument.write(html);
+            }
+        }
+
+        window.customElements.define(CbnAplicaSablon.is, CbnAplicaSablon);
+    </script>
+</dom-module>
