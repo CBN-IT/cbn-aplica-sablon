@@ -49,6 +49,10 @@
                         type: Object,
                         value: {}
                     },
+                    config: {
+                        type: Object,
+                        value: {}
+                    },
                     keys: {
                         type: Array,
                         value: []
@@ -76,10 +80,10 @@
             openAplicaSablon(event) {
                 let sablon = JSON.parse(JSON.stringify(event.detail.sablon));
                 this.sablon = sablon;
-                this.model = sablon["valueParametri"] || {};
                 this.keys = event.detail.keys || [];
                 if (this.sablon["parametri"] == "Da") {
-                    this.set("sablon.contentParametri", JSON.parse(sablon["contentParametri"]));
+                    this.model = sablon["valueParametri"] || {};
+                    this.config =  JSON.parse(sablon["contentParametri"]);
                     this.$.dialog.open();
                 } else {
                     this.generareRaport(this.sablon["_hash"], this.keys, false, this.currentModel);
