@@ -14,7 +14,7 @@
         </style>
         <paper-dialog id="dialog">
             <h2>Detalii raport</h2>
-            <cbn-form id="form" config="{{sablon.contentParametri}}" model="{{model}}"></cbn-form>
+            <cbn-form id="form" config="{{config}}" model="{{model}}"></cbn-form>
             <div class="buttons">
                 <paper-button dialog-dismiss class="icon-btn red background margin">
                     <iron-icon icon="close"></iron-icon>
@@ -50,8 +50,7 @@
                         value: {}
                     },
                     config: {
-                        type: Object,
-                        value: {}
+                        type: Object
                     },
                     keys: {
                         type: Array,
