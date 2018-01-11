@@ -3,6 +3,7 @@
 <link rel="import" href="../cbn-form/cbn-form.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../cbn-btn-styles/cbn-btn-styles.html">
 
 <dom-module id="cbn-aplica-sablon">
     <template>
@@ -15,8 +16,14 @@
             <h2>Detalii raport</h2>
             <cbn-form id="form" config="{{sablon.contentParametri}}" model="{{model}}"></cbn-form>
             <div class="buttons">
-                <paper-button dialog-dismiss class="icon-btn">Cancel</paper-button>
-                <paper-button class="icon-btn" on-click="aplicaSablon">Generate report</paper-button>
+                <paper-button dialog-dismiss class="icon-btn red background margin">
+                    <iron-icon icon="close"></iron-icon>
+                    <span>Cancel</span>
+                </paper-button>
+                <paper-button autofocus class="icon-btn green background margin" on-click="aplicaSablon">
+                    <iron-icon icon="check"></iron-icon>
+                    <span>Generate report</span>
+                </paper-button>
             </div>
         </paper-dialog>
 
