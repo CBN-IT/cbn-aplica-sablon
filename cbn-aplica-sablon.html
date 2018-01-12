@@ -14,7 +14,7 @@
         </style>
         <paper-dialog id="dialog">
             <h2>Detalii raport</h2>
-            <cbn-form id="form" config="{{config}}" model="{{model}}"></cbn-form>
+            <cbn-form id="form" config="{{config}}" model="{{currentModel}}"></cbn-form>
             <div class="buttons">
                 <paper-button dialog-dismiss class="icon-btn red background margin">
                     <iron-icon icon="close"></iron-icon>
@@ -84,7 +84,7 @@
                 this.sablon = sablon;
                 this.keys = event.detail.keys || [];
                 if (this.sablon["parametri"] == "Da") {
-                    this.model = sablon["valueParametri"] || {};
+                    this.currentModel = sablon["valueParametri"] || {};
                     this.config =  JSON.parse(sablon["contentParametri"]);
                     this.$.dialog.open();
                 } else {
