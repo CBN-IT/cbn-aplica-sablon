@@ -61,7 +61,10 @@
                         value: {}
                     },
                     namespace: {
-                        type: String
+                        type: String,
+                        value: function(){
+                            return window.namespace
+                        }
                     }
                 };
             }
