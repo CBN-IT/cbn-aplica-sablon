@@ -4,7 +4,6 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
-    "paper-button": "PolymerElements/paper-button#^2.0.0",
     "cbn-form": "CBN-IT/cbn-form#polymer2.0",
     "cbn-btn-styles": "CBN-IT/cbn-btn-styles#polymer2.0"
   },
