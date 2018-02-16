@@ -113,7 +113,7 @@
                 let iframe = document.createElement("iframe");
                 iframe.style.display = "none";
                 document.body.appendChild(iframe);
-                let html = "<!DOCTYPE html><html><head><title></title></head><body><form id='formRaport' action='/do/Raport' target=\"_blank\" method='POST'>";
+                let html = "<!DOCTYPE html><html><head><title></title></head><body><form id='formRaport' action='/do/Raport' target=\"_blank\" method='GET'>";
                 html += "<input type='hidden' name='namespace' value='" + this.namespace + "'/>";
                 html += "<input type='hidden' name='hashReport' value='" + hashReport + "'/>";
 
