@@ -114,14 +114,13 @@
             }
 
             openAplicaSablon(event) {
-                let sablon = JSON.parse(JSON.stringify(event.detail.sablon));
+                let sablon = typeof sablon === "string" ? JSON.parse(JSON.stringify(sablon)) : event.detail.sablon;
                 this.sablon = sablon;
                 this.keys = event.detail.keys || [];
-                if (this.sablon["parametri"] == "Da") {
-                    this.currentModel = sablon["valueParametri"] || {};
-                    this.config =  JSON.parse(sablon["contentParametri"]);
+                if (this.sablon["parametri"] === "Da") {
+                    this.currentModel = event.detail["valueParametri"] || {};
+                    this.config = typeof sablon["contentParametri"] === "string" ? JSON.parse(sablon["contentParametri"]) : sablon["contentParametri"];
                     this.hiddenForm = false;
-                    // this.$.dialog.open();
                 } else {
                     this.generareRaport(this.sablon["_hash"], this.keys, false, this.currentModel);
                 }
@@ -130,7 +129,6 @@
             aplicaSablon() {
                 if (this.$.form.validate()) {
                     this.generareRaport(this.sablon["_hash"], this.keys, false, this.currentModel);
-                    // this.$.dialog.close();
                     this.cancelForm();
                 } else {
                     this.dispatchEvent(new CustomEvent('cbn-message', {
