@@ -1,0 +1,103 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/cbn-btn-styles/cbn-btn-styles.html">
+<link rel="import" href="../../bower_components/cbn-icons/cbn-icons.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/iron-file-icons/file-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+
+<link rel="import" href="../../bower_components/cbn-table/cbn-data-table.html">
+
+
+<dom-module id="reports-dropdown">
+    <template>
+        <style include="iron-flex cbn-btn-styles">
+            :host{
+                bottom: 10px;
+                right: 130px;
+                position:absolute
+            }
+            .report{
+                padding: 6px 25px 6px 10px;
+                border-bottom: 1px solid rgb(219, 219, 219);
+            }
+            .report:hover{
+                background: #eeeeee;
+                cursor: pointer;
+            }
+            .report span{
+                white-space: nowrap;
+                padding-left: 5px;
+            }
+            .report iron-icon{
+                flex-shrink: 0;
+            }
+            paper-menu-button{
+                --paper-menu-button-dropdown: {
+                    margin-top:50px;
+                }
+            }
+        </style>
+
+        <paper-menu-button vertical-align="bottom" no-animations >
+            <button slot="dropdown-trigger" class="icon-btn big-btn color fab blue ripple sides-margin" index="{{item.initialIndex}}" style="position: static">
+                <iron-icon icon="insert-chart"></iron-icon>
+            </button>
+            <div slot="dropdown-content">
+                <template is="dom-repeat" items="{{reports}}">
+                    <div class="report horizontal layout center" on-click="generateReport">
+                        <iron-icon icon="file:{{item.tipGenerare}}"></iron-icon>
+                        <span>{{item.numeSablon}}</span>
+                    </div>
+                </template>
+            </div>
+        </paper-menu-button>
+
+    </template>
+
+    <script>
+        class ReportsDropdown extends Polymer.Element {
+            static get is() {
+                return 'reports-dropdown';
+            }
+
+            static get properties() {
+                return {
+                    type: {
+                        type: String
+                    },
+                    reports: {
+                        type: Array
+                    },
+                    table: {
+                        type: Object
+                    }
+                };
+            }
+
+            ready() {
+                super.ready();
+                this.reports = window.reports.filter(function(report){
+                    return report["entitate"] === this.type
+                }.bind(this));
+            }
+
+            generateReport(event) {
+                let keys = [];
+                if(this.table !== undefined){
+                    let selectedItems = this.table.selectedItems;
+                    for(let i=0; i< selectedItems.length; i++){
+                        keys.push(selectedItems[i]["_hash"]);
+                    }
+                }
+                this.dispatchEvent(new CustomEvent('cbn-aplica-sablon', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {"sablon": event.model.item, "keys": keys}
+                }));
+            }
+        }
+
+        window.customElements.define(ReportsDropdown.is, ReportsDropdown);
+    </script>
+</dom-module>
