@@ -78,7 +78,7 @@
             ready() {
                 super.ready();
                 this.reports = window.reports.filter(function(report){
-                    return report["entitate"] === this.type
+                    return report["entitate"] === this.type.toLowerCase();
                 }.bind(this));
             }
 
