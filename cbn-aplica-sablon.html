@@ -99,6 +99,13 @@
                     hiddenForm: {
                         type: Boolean,
                         value: true
+                    },
+                    method: {
+                        type: Boolean,
+                        value: function () {
+                            const ua = window.navigator.userAgent;
+                            return (/[mM]obi/i.test(ua) || /[tT]ablet/i.test(ua) || /[aA]ndroid/i.test(ua)) ? "GET" : "POST";
+                        }
                     }
                 };
             }
@@ -150,7 +157,7 @@
                 let iframe = document.createElement("iframe");
                 iframe.style.display = "none";
                 document.body.appendChild(iframe);
-                let html = "<!DOCTYPE html><html><head><title></title></head><body><form id='formRaport' action='/do/Raport' target=\"_blank\" method='GET'>";
+                let html = "<!DOCTYPE html><html><head><title></title></head><body><form id='formRaport' action='/do/Raport' target=\"_blank\" method='" + this.method + "'>";
                 html += "<input type='hidden' name='namespace' value='" + this.namespace + "'/>";
                 html += "<input type='hidden' name='hashReport' value='" + hashReport + "'/>";
 
