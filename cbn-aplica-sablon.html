@@ -128,13 +128,13 @@
                     this.config = typeof this.sablon["contentParametri"] === "string" ? JSON.parse(this.sablon["contentParametri"]) : this.sablon["contentParametri"];
                     this.hiddenForm = false;
                 } else {
-                    this.generareRaport(this.sablon["_hash"], this.keys, false, this.currentModel);
+                    this.generareRaport(this.sablon["_hash"], this.keys, false, this.currentModel, this.sablon.multiplicareProcese);
                 }
             }
 
             aplicaSablon() {
                 if (this.$.form.validate()) {
-                    this.generareRaport(this.sablon["_hash"], this.keys, false, this.currentModel);
+                    this.generareRaport(this.sablon["_hash"], this.keys, false, this.currentModel, this.sablon.multiplicareProcese);
                     this.cancelForm();
                 } else {
                     this.dispatchEvent(new CustomEvent('cbn-message', {
@@ -152,12 +152,16 @@
                 this.hiddenForm = true;
             }
 
-            generareRaport(hashReport, hash, descarcare, params) {
+            generareRaport(hashReport, hash, descarcare, params, multiplicareProcese) {
                 let i;
                 let iframe = document.createElement("iframe");
                 iframe.style.display = "none";
                 document.body.appendChild(iframe);
-                let html = "<!DOCTYPE html><html><head><title></title></head><body><form id='formRaport' action='/do/Raport' target=\"_blank\" method='" + this.method + "'>";
+                var url = "/do/Raport";
+                if(multiplicareProcese==="NodeJS"){
+                    url="http://raport.cbn-it.ro/"
+                }
+                let html = "<!DOCTYPE html><html><head><title></title></head><body><form id='formRaport' action='"+url+"' target=\"_blank\" method='" + this.method + "'>";
                 html += "<input type='hidden' name='namespace' value='" + this.namespace + "'/>";
                 html += "<input type='hidden' name='hashReport' value='" + hashReport + "'/>";
 
